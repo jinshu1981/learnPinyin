@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivityFragment"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/dimgray">
+    <TextView android:text = "字母表"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:id = "@+id/go_to_alphabetTable"
+        android:paddingBottom="@dimen/activity_vertical_margin"/>
+    <TextView android:text="@string/example" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/character"
+        android:background="@drawable/card_border"
+        android:textSize="70sp"
+        android:padding = "20sp"
+        android:textColor="@color/white"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+    <TextView android:id="@+id/pinyin" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:padding = "10sp"
+        android:textColor="@color/white"
+        />
+    <ImageView android:id = "@+id/delete"
+        android:src = "@drawable/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/alphabet"
+        android:columnWidth="30sp"
+        android:numColumns="5"
+        android:gravity="center"
+        android:minWidth="30sp">
+    </GridView>
+</LinearLayout>

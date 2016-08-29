@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/dimgray"
+    tools:context="com.jinshu.xuzhi.learnpinyin.ActivityAlphabetsTableFragment">
+<LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/alphabet_table"
+        android:columnWidth="30sp"
+        android:numColumns="3"
+        android:gravity="center"
+        android:minWidth="30sp"
+        android:layout_above="@+id/divider" >
+    </GridView>
+</LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1sp"
+        android:background="@color/lightgray"
+        android:id = "@+id/divider"
+        android:layout_above="@+id/options"
+        android:paddingTop="2sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:id = "@+id/options"
+        android:background="@color/dimgray">
+
+            <ImageView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bpm"
+                android:id = "@+id/image_bpm"
+                android:layout_weight="1"/>
+
+            <ImageView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/aoe_white"
+                android:id = "@+id/image_aoe"
+                android:layout_weight="1"/>
+
+
+        </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:gravity="center"
+    android:background="@color/dimgray">
+    <TextView android:text="@string/example" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/character"
+        android:background="@drawable/card_border"
+        android:textSize="70sp"
+        android:padding = "20sp"
+        android:textColor="@color/white"/>
+    <TextView android:text="@string/example" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/pinyin"
+        android:textSize="50sp"
+        android:padding = "20sp"
+        android:textColor="@color/white"/>
+</LinearLayout>

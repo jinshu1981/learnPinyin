@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">LearnPinyin</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="example">天</string>
+    <string name="example_pinyin">tian</string>
+    <string name="shengmu">声母</string>
+    <string name="yunmu">韵母</string>
+    <string name="example_yinbiao1">­</string>
+    <string name="example_yinbiao2">ˊ</string>
+    <string name="example_yinbiao3">ˇ</string>
+    <string name="example_yinbiao4">ˋ</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_alphabets_table">AlphabetsTableActivity</string>
+    <string name="title_activity_activity_alphabets_table">ActivityAlphabetsTable</string>
+</resources>
