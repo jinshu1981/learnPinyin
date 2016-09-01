@@ -1,13 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/dimgray"
+    android:paddingTop="@dimen/activity_horizontal_margin"
     tools:context="com.jinshu.xuzhi.learnpinyin.ActivityAlphabetsTableFragment">
 <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin">
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="5sp"
+    android:gravity="center_vertical"
+    android:layout_above="@+id/divider" >
 
     <GridView
         android:layout_width="wrap_content"
@@ -16,9 +19,19 @@
         android:columnWidth="30sp"
         android:numColumns="3"
         android:gravity="center"
-        android:minWidth="30sp"
-        android:layout_above="@+id/divider" >
+        android:minWidth="30sp">
     </GridView>
+    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:src = "@drawable/go"
+        android:id = "@+id/go"
+        android:padding="32sp"
+        android:layout_gravity="center_horizontal"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src = "@drawable/settings"
+        android:id = "@+id/settings"
+        android:layout_gravity="right"/>
 </LinearLayout>
 
     <View

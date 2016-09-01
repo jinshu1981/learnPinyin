@@ -1,5 +1,6 @@
 package com.jinshu.xuzhi.learnpinyin;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract;
+
 import java.io.IOException;
 
 /**
@@ -21,7 +24,7 @@ import java.io.IOException;
 public class FragmentAlphabetsTable extends Fragment {
     View rootView;
     GridView alphabetTable;
-    ImageView bpmImageView,aoeImageView;
+    ImageView bpmImageView,aoeImageView,goView,settingsView;
     AdapterAlphabetTable mbpmAdapter,maoeAdapter;
     private final String LOG_TAG = this.getClass().getSimpleName();
     String bpm = "b,p,m,f,d,t,n,l,g,k,h,j,q,x,r,z,c,s,y,w,zh,ch,sh";
@@ -41,6 +44,8 @@ public class FragmentAlphabetsTable extends Fragment {
         alphabetTable = (GridView)rootView.findViewById(R.id.alphabet_table);
         bpmImageView = (ImageView)rootView.findViewById(R.id.image_bpm);
         aoeImageView = (ImageView)rootView.findViewById(R.id.image_aoe);
+        settingsView = (ImageView)rootView.findViewById(R.id.settings);
+        goView = (ImageView)rootView.findViewById(R.id.go);
         mbpmAdapter = new AdapterAlphabetTable(getActivity(),bpmArray);
         maoeAdapter = new AdapterAlphabetTable(getActivity(),aoeArray);
         alphabetTable.setAdapter(mbpmAdapter);
@@ -54,14 +59,8 @@ public class FragmentAlphabetsTable extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView currentAlphabet = (TextView) view;
-                String alpha = currentAlphabet.getText().toString().replace("ü","v");
+                String alpha = currentAlphabet.getText().toString().replace("ü", "v");
 
-                /*show alphabet card
-                Bundle bundle = new Bundle();
-                bundle.putString("alphabet", currentAlphabet.getText().toString());
-                CardFragment fragment = new CardFragment();
-                fragment.setArguments(bundle);
-                //fragment.show(getFragmentManager(), "CardFragment");*/
                 try {
                     mp.reset();
 
@@ -89,6 +88,22 @@ public class FragmentAlphabetsTable extends Fragment {
                 alphabetTable.setAdapter(maoeAdapter);
                 bpmImageView.setImageResource(R.drawable.bpm_white);
                 aoeImageView.setImageResource(R.drawable.aoe);
+            }
+        });
+
+        goView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra(LearnPinyinContract.Character.COLUMN_DONE, "");/*仅作为一个标记，不需要值*/
+                startActivity(intent);
+            }
+        });
+
+        settingsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
         return rootView;

@@ -25,10 +25,9 @@ public class LearnPinyinContract {
     public static final String YES = "yes";
     public static final String NO = "no";
     public static final String FINISHED = "finished";
-    //public static final String DONE = "done";
 
     public static final class Character implements BaseColumns {
-
+        private final String LOG_TAG = this.getClass().getSimpleName();
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CHARACTER).build();
 
@@ -56,6 +55,7 @@ public class LearnPinyinContract {
         }
 
         public static Uri buildCharacterUriById(int id) {
+            Log.e("BY ID","ID  = " + id);
             return CONTENT_URI.buildUpon().appendPath(COLUMN_ID).appendPath(Integer.toString(id)).build();
         }
 

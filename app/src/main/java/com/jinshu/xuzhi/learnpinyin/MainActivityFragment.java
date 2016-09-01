@@ -2,7 +2,8 @@ package com.jinshu.xuzhi.learnpinyin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract;
@@ -35,9 +37,11 @@ import java.util.regex.Pattern;
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     View rootView;
     GridView alphabetsGridView;
-    TextView character,pinyin,goToAlphabet;
-    ImageView delete;
+    TextView character,pinyin;
+    ImageView delete,close;
+    LinearLayout progressLayout;
     int index = 0;
+    static MainActivityFragment mFragment;
     //String tone = "āáǎàēéěèōóǒò";
     String [][]tone = {{"¯a","ā"},{"ˊa","á"},{"ˇa","ǎ"},{"ˋa","à"},
                         {"¯o","ō"},{"ˊo","ó"},{"ˇo","ǒ"},{"ˋo","ò"},
@@ -80,17 +84,19 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public MainActivityFragment() {
 
         alphabetsArray = alphabets.split("");
+        mFragment = this;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        progressLayout = (LinearLayout)rootView.findViewById(R.id.progress);
         alphabetsGridView =  (GridView)rootView.findViewById(R.id.alphabet);
         character = (TextView)rootView.findViewById(R.id.character);
         pinyin =  (TextView)rootView.findViewById(R.id.pinyin);
         delete = (ImageView)rootView.findViewById(R.id.delete);
-        goToAlphabet = (TextView)rootView.findViewById(R.id.go_to_alphabetTable);
+        close = (ImageView)rootView.findViewById(R.id.close);
         mAdapter = new AdapterAlphabets(getContext(),alphabetsArray);
         alphabetsGridView.setAdapter(mAdapter);
 
@@ -104,69 +110,79 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         //character.setText(mCharacters[index].character);
 
        alphabetsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String content = alphabetsArray[position + 1];
-                String currentPinyin = pinyin.getText().toString();
-                //Log.e(LOG_TAG, "position = " + position);
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               String content = alphabetsArray[position + 1];
+               String currentPinyin = pinyin.getText().toString();
+               //Log.e(LOG_TAG, "position = " + position);
 
                 /*ü 遇到 j,q,x,y要去掉两点*/
-              if (content.equals("ü") &&
-                   (currentPinyin.contains("j")||currentPinyin.contains("q")||currentPinyin.contains("x")||currentPinyin.contains("y")))
-                    content = "u";
+               if (content.equals("ü") &&
+                       (currentPinyin.contains("j") || currentPinyin.contains("q") || currentPinyin.contains("x") || currentPinyin.contains("y")))
+                   content = "u";
 
                 /*标音标，音标在最后标，标完后不能再输入其他拼音，只能删除*/
 
-                if (position < 26)/*a-z*/ {
-                    pinyin.setText(currentPinyin + content);
-                } else/*四声音标*/ {
+               if (position < 26)/*a-z*/ {
+                   currentPinyin = currentPinyin + content;
+               } else/*四声音标*/ {
                     /*转换为标准四声音标显示*/
-                    currentPinyin = convertToPinyinWithTone(currentPinyin, content);
-                    pinyin.setText(currentPinyin);
-                }
+                   currentPinyin = convertToPinyinWithTone(currentPinyin, content);
+               }
+               pinyin.setText(currentPinyin);
                 /*输入至少一个字符后，显示删除符*/
-                if (pinyin.getText().toString().length() == 1) {
-                    delete.setVisibility(View.VISIBLE);
-                }
-                if (currentPinyin.equals(mCharacters[index].pinyin)) {
-                    //character.setTextColor(getActivity().getResources().getColor(R.color.green));
-                    //show success card
+               if (currentPinyin.length() == 1) {
+                   delete.setVisibility(View.VISIBLE);
+               }
+               if (currentPinyin.equals(mCharacters[index].pinyin)) {
                     /*show character card */
-                    Bundle bundle = new Bundle();
-                    bundle.putString("character", mCharacters[index].character);
-                    bundle.putString("pinyin", mCharacters[index].pinyin);
-                    CardFragment fragment = new CardFragment();
-                    fragment.setArguments(bundle);
-                    fragment.show(getFragmentManager(), "CardFragment");
-                    //play sound
-                    try {
-                        mp.reset();
-                        AssetFileDescriptor afd = getActivity().getAssets().openFd("characters/"+ mCharacters[index].sounds +".mp3");
-                        mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                        afd.close();
-                        mp.prepareAsync();
-                    }catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    //go to next pinyin card
-                    index++;
-                    if (index < mCharacters.length) {
-                        //change to next pinyin
-                        pinyin.setText("");
-                        character.setText(mCharacters[index].character);
-                        delete.setVisibility(View.GONE);
-                    }
-                    else
-                    {
-                        pinyin.setText("");
-                        delete.setVisibility(View.GONE);
-                    }
+                   Bundle bundle = new Bundle();
+                   bundle.putString("character", mCharacters[index].character);
+                   bundle.putString("pinyin", mCharacters[index].pinyin);
+                   CardFragment fragment = new CardFragment();
+                   fragment.setArguments(bundle);
+                   fragment.show(getFragmentManager(), "CardFragment");
+                   //play sound
+                   try {
+                       mp.reset();
+                       AssetFileDescriptor afd = getActivity().getAssets().openFd("characters/" + mCharacters[index].sounds + ".mp3");
+                       mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                       afd.close();
+                       mp.prepareAsync();
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   }
+                   //update progress bar
+                   ImageView progressGrid = (ImageView) rootView.findViewWithTag(index);
+                   progressGrid.setImageResource(R.drawable.grid_green);
+
+                    /*update character learned status*/
+                   mCharacters[index].done = LearnPinyinContract.YES;
+                   ContentValues value = new ContentValues();
+                   value.put(LearnPinyinContract.Character.COLUMN_DONE, mCharacters[index].done);
+                   getActivity().getContentResolver().update(
+                           LearnPinyinContract.Character.buildCharacterUriById(mCharacters[index].id),
+                           value, null, null);
+
+                   //go to next pinyin card
+                   index++;
+                   if (index < mCharacters.length) {
+                       //change to next pinyin
+                       pinyin.setText("");
+                       character.setText(mCharacters[index].character);
+                       delete.setVisibility(View.GONE);
+                   } else {
+                       pinyin.setText("");
+                       delete.setVisibility(View.GONE);
+                       new ConfirmFragment().show(getFragmentManager(), "ConfirmFragment");
+
+                   }
 
 
-                }
+               }
 
-            }
-        });
+           }
+       });
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,17 +193,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 if (pinyin.getText().toString().length() == 0) {
                     delete.setVisibility(View.GONE);
                 }
-                if (!pinyin.getText().toString().equals("tiān")) {
-                    character.setTextColor(getActivity().getResources().getColor(R.color.white));
-                }
             }
         });
 
-        goToAlphabet.setOnClickListener(new View.OnClickListener() {
+        close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ActivityAlphabetsTable.class);
-                startActivity(intent);
+                getActivity().finish();
             }
         });
         return rootView;
@@ -279,21 +291,25 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         //Log.e(LOG_TAG, "toneAlphabet = " + toneAlphabet);
         return toneAlphabet;
     }
+
     @Override
     public void onResume()
     {
         super.onResume();
-        getLoaderManager().restartLoader(PINYIN_LEARNING_LOADER, null, this);
+        if (getActivity().getIntent().hasExtra(LearnPinyinContract.Character.COLUMN_DONE)) {
+            getLoaderManager().restartLoader(PINYIN_LEARNING_LOADER, null, this);
+            getActivity().getIntent().removeExtra(LearnPinyinContract.Character.COLUMN_DONE);
+        }
         Log.e(LOG_TAG, "onResume");
     }
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         Uri uri = null;
-        String sortOrder = LearnPinyinContract.Character.COLUMN_ID + " ASC";
+        String sortOrder = LearnPinyinContract.Character.COLUMN_ID + " ASC LIMIT 5";
 
 
-        uri = LearnPinyinContract.Character.buildCharacterUriByIdList("1,2,3,4,5,6,7,8,9,10");
+        uri = LearnPinyinContract.Character.buildCharacterUriByDone(LearnPinyinContract.NO);
         return new CursorLoader(getActivity(),
                 uri,
                 null,
@@ -314,20 +330,25 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         int cursorCount = cursor.getCount();
         //Log.v(LOG_TAG,"cursor.getCount() = " + cursor.getCount());
         cursor.moveToFirst();
-
         /*complete learning cards info*/
-        mCharacters = new CharacterInfo[cursorCount];//first item is ""
-
+        mCharacters = new CharacterInfo[cursorCount];
         for (int i = 0;i < mCharacters.length;i++)
         {
             mCharacters[i] = new CharacterInfo();
             generateCharactersInfo(mCharacters[i],cursor);
             cursor.moveToNext();
         }
-
+        /*update excises*/
+        index = 0;
         character.setText(mCharacters[index].character);
-
-
+        progressLayout.removeAllViews();
+        for(int i=0;i< mCharacters.length;i++) {
+            ImageView image = new ImageView(getActivity());
+            image.setImageResource(R.drawable.grid_white);
+            image.setTag(i);
+            image.setPadding(2, 2, 2, 2);
+            progressLayout.addView(image);
+        }
         //UpdateDisplay(index);
         Log.e(LOG_TAG, "onLoadFinished");
 
@@ -358,6 +379,29 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             pinyin.setText(getArguments().getString("pinyin"));
             character.setTypeface(tf1);
             builder.setView(view);
+            return builder.create();
+        }
+    }
+    public static class ConfirmFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setPositiveButton("再来", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    /*再生成一组拼音练习*/
+                    getLoaderManager().restartLoader(PINYIN_LEARNING_LOADER, null, mFragment);
+                }
+            });
+            builder.setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    /*返回学习拼音界面*/
+                    getActivity().finish();
+                }
+            });
             //TextView view = new TextView(getActivity());
             //view.setText("b");
             //view.setBackgroundResource(R.drawable.card_border);

@@ -106,7 +106,7 @@ public class LearnPinyinProvider extends ContentProvider {
             Uri uri, String[] projection, String sortOrder) {
 
         String name = com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.getNameFromUri(uri);
-        Log.v(LOG_TAG, com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.COLUMN_NAME + " = " + name);
+        Log.e(LOG_TAG, com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.COLUMN_NAME + " = " + name);
         sLearnPinyinQueryBuilder.setTables(com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.TABLE_NAME);
         return sLearnPinyinQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
@@ -121,7 +121,7 @@ public class LearnPinyinProvider extends ContentProvider {
             Uri uri, String[] projection, String sortOrder) {
 
         String done = com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.getTheSecondPara(uri);
-        Log.v(LOG_TAG, com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.COLUMN_DONE + " = " + done);
+        Log.e(LOG_TAG, com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.COLUMN_DONE + " = " + done);
         sLearnPinyinQueryBuilder.setTables(com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.TABLE_NAME);
         return sLearnPinyinQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
@@ -162,6 +162,16 @@ public class LearnPinyinProvider extends ContentProvider {
                 sortOrder
         );
     }
+
+    private int UpdateCharacterById(Uri uri, ContentValues values) {
+
+        String id = com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.getTheSecondPara(uri);
+
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        return db.update(com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.TABLE_NAME, values, sCharacterByIdSelection,
+                new String[]{id});
+
+    }
     /*****************************************************************************************************************/
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
@@ -169,7 +179,7 @@ public class LearnPinyinProvider extends ContentProvider {
         // Here's the switch statement that, given a URI, will determine what kind of request it is,
         // and query the database accordingly.
         Cursor retCursor;
-        Log.v(LOG_TAG, "query uri = " + uri.toString());
+        Log.e(LOG_TAG, "query uri = " + uri.toString());
         switch (sUriMatcher.match(uri)) {
             case LEARN_PINYIN_CHARACTER_WITH_NAME: {
                 retCursor = getCharacterByName(uri, projection, sortOrder);
@@ -199,7 +209,7 @@ public class LearnPinyinProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         Uri returnUri;
-        Log.v(LOG_TAG,"insert uri = " + uri.toString());
+        Log.e(LOG_TAG, "insert uri = " + uri.toString());
         switch (match) {
             case LEARN_PINYIN_CHARACTER: {
                 long _id = db.insert(com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.TABLE_NAME, null, values);
@@ -256,7 +266,9 @@ public class LearnPinyinProvider extends ContentProvider {
                 rowsUpdated = db.update(com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract.Character.TABLE_NAME, values, selection,
                         selectionArgs);
                 break;
-
+            case LEARN_PINYIN_CHARACTER_WITH_ID:
+                rowsUpdated = UpdateCharacterById(uri, values);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

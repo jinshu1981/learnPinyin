@@ -42,7 +42,10 @@ public class AdapterAlphabetTable extends BaseAdapter {
             case "e":
             case "i":
             case "u":
-            case "v":
+            case "ü":
+            case "iu":
+
+            case "en":
                 textView.setTextColor(mContext.getResources().getColor(R.color.violet));
                 break;
             case "b":
@@ -50,6 +53,11 @@ public class AdapterAlphabetTable extends BaseAdapter {
             case "r":
             case "y":
             case "z":
+            case "ai":
+            case "in":
+            case "üe":
+
+            case "ong":
                 textView.setTextColor(mContext.getResources().getColor(R.color.deepskyblue));
                 break;
             case "c":
@@ -57,6 +65,9 @@ public class AdapterAlphabetTable extends BaseAdapter {
             case "w":
             case "n":
             case "sh":
+            case "ei":
+
+            case "un":
                 textView.setTextColor(mContext.getResources().getColor(R.color.lime));
                 break;
             case "d":
@@ -64,12 +75,20 @@ public class AdapterAlphabetTable extends BaseAdapter {
             case "x":
             case "t":
             case "ch":
+            case "ui":
+            case "ün":
+
+            case "ie":
                 textView.setTextColor(mContext.getResources().getColor(R.color.yellow));
                 break;
             case "m":
             case "s":
             case "q":
             case "f":
+            case "ao":
+            case "ing":
+
+            case "ang":
                 textView.setTextColor(mContext.getResources().getColor(R.color.orange));
                 break;
 
@@ -78,6 +97,11 @@ public class AdapterAlphabetTable extends BaseAdapter {
             case "j":
             case "k":
             case "zh":
+            case "ou":
+            case "eng":
+            case "er":
+
+            case "an":
                 textView.setTextColor(mContext.getResources().getColor(R.color.white));
                 break;
 

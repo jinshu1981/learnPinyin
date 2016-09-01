@@ -70,8 +70,6 @@ public class AdapterAlphabets extends BaseAdapter {
             case "f":
                 textView.setTextColor(mContext.getResources().getColor(R.color.orange));
                 break;
-
-
             case "g":
             case "j":
             case "k":

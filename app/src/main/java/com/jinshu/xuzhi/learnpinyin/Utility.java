@@ -51,4 +51,9 @@ public class Utility {
         myOutput.close();
         myInput.close();
     }
+
+     static boolean doesDatabaseExist(Context context, String dbName) {
+        File dbFile = context.getDatabasePath(dbName);
+        return dbFile.exists();
+    }
 }

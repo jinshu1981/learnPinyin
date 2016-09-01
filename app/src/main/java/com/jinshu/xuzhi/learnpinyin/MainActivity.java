@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         //Log.e(LOG_TAG, "begin copy database");
         /*第一次打开软件，安装数据库*/
-        if(true) {
+        Boolean dbExist = com.jinshu.xuzhi.learnpinyin.Utility.doesDatabaseExist(this,"PinyinCharacters.db");
+        if(!dbExist) {
             try {
                 Log.e(LOG_TAG, "begin copy database1");
                 com.jinshu.xuzhi.learnpinyin.Utility.copyDataBase(getBaseContext());

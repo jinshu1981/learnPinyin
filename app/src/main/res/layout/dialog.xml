@@ -11,13 +11,13 @@
         android:layout_height="wrap_content"
         android:id = "@+id/character"
         android:background="@drawable/card_border"
-        android:textSize="70sp"
+        android:textSize="50sp"
         android:padding = "20sp"
         android:textColor="@color/white"/>
     <TextView android:text="@string/example" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id = "@+id/pinyin"
-        android:textSize="50sp"
-        android:padding = "20sp"
+        android:textSize="30sp"
+        android:padding = "10sp"
         android:textColor="@color/white"/>
 </LinearLayout>
