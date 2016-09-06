@@ -1,6 +1,9 @@
 package com.jinshu.xuzhi.learnpinyin;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,8 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jinshu.xuzhi.learnpinyin.data.LearnPinyinContract;
@@ -32,6 +38,9 @@ public class FragmentAlphabetsTable extends Fragment {
     String[] bpmArray,aoeArray;
     String CONSTANTS_RES_PREFIX = "android.resource://com.jinshu.xuzhi.learnpinyin/";
     final MediaPlayer mp  = new MediaPlayer();
+    PopupWindow mPopupWindow;
+    Button clearExciseRecord;
+
     public FragmentAlphabetsTable() {
         bpmArray = bpm.split(",");
         aoeArray = aoe.split(",");
@@ -49,6 +58,29 @@ public class FragmentAlphabetsTable extends Fragment {
         mbpmAdapter = new AdapterAlphabetTable(getActivity(),bpmArray);
         maoeAdapter = new AdapterAlphabetTable(getActivity(),aoeArray);
         alphabetTable.setAdapter(mbpmAdapter);
+
+
+        View popupView = getActivity().getLayoutInflater().inflate(R.layout.popup_window_menu, null);
+
+        mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, true);
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+        mPopupWindow.getContentView().setFocusableInTouchMode(true);
+        mPopupWindow.getContentView().setFocusable(true);
+        mPopupWindow.setAnimationStyle(R.style.anim_menu_bottombar_bottom);
+
+        clearExciseRecord = (Button)popupView.findViewById(R.id.clear_excise_record);
+        clearExciseRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentValues value = new ContentValues();
+                String newStatus = LearnPinyinContract.NO;
+                value.put(LearnPinyinContract.Character.COLUMN_DONE, newStatus);
+                getActivity().getContentResolver().update(LearnPinyinContract.Character.CONTENT_URI, value, null, null);
+            }
+        });
 
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             public void onPrepared(MediaPlayer mp) {
@@ -103,6 +135,7 @@ public class FragmentAlphabetsTable extends Fragment {
         settingsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mPopupWindow.showAsDropDown(goView);
 
             }
         });

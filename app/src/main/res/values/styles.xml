@@ -5,4 +5,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="anim_menu_bottombar_bottom" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/menu_bottombar_in</item>
+        <item name="android:windowExitAnimation">@anim/menu_bottombar_out</item>
+    </style>
+
+    <style name="anim_menu_bottombar_right" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/menu_bottombar_in_right</item>
+        <item name="android:windowExitAnimation">@anim/menu_bottombar_out_right</item>
+    </style>
 </resources>

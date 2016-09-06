@@ -300,13 +300,13 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             getLoaderManager().restartLoader(PINYIN_LEARNING_LOADER, null, this);
             getActivity().getIntent().removeExtra(LearnPinyinContract.Character.COLUMN_DONE);
         }
-        Log.e(LOG_TAG, "onResume");
+        //Log.e(LOG_TAG, "onResume");
     }
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         Uri uri = null;
-        String sortOrder = LearnPinyinContract.Character.COLUMN_ID + " ASC LIMIT 5";
+        String sortOrder = LearnPinyinContract.Character.COLUMN_ID + " ASC LIMIT 10";
 
 
         uri = LearnPinyinContract.Character.buildCharacterUriByDone(LearnPinyinContract.NO);
@@ -350,7 +350,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             progressLayout.addView(image);
         }
         //UpdateDisplay(index);
-        Log.e(LOG_TAG, "onLoadFinished");
+        //Log.e(LOG_TAG, "onLoadFinished");
 
     }
         @Override
